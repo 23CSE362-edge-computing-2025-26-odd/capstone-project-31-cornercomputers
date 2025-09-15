@@ -156,3 +156,29 @@ class TD3(object):
             for param, target_param in zip(self.actor.parameters(), self.actor_target.parameters()):
                 target_param.data.copy_(self.tau * param.data + (1 - self.tau) * target_param.data)
 
+
+if __name__ == "__main__":
+    state_dim = 10  
+    action_dim = 2   
+    max_action = 1.0
+
+    td3 = TD3(state_dim, action_dim, max_action)
+    replay_buffer = ReplayBuffer()
+
+    
+    for t in range(1000):
+        state = np.random.randn(state_dim)
+        action = td3.select_action(state)
+        next_state = np.random.randn(state_dim)
+        reward = np.random.randn()
+        done = np.random.choice([0, 1])
+
+        replay_buffer.add((state, next_state, action, reward, done))
+
+        if t > 100:
+            td3.train(replay_buffer, batch_size=32)
+
+    print("TD3 training loop executed (demo).")
+
+
+
