@@ -1,3 +1,4 @@
+from model_cache import EdgeModelCache, handle_request, fetch_from_cloud
 import numpy as np
 import torch
 import torch.nn as nn
@@ -165,7 +166,13 @@ if __name__ == "__main__":
     td3 = TD3(state_dim, action_dim, max_action)
     replay_buffer = ReplayBuffer()
 
-    
+    # Initialize cache
+    import os
+    cloud_dir = os.path.join(os.path.dirname(__file__), 'cloud')
+    model_filenames = [f for f in os.listdir(cloud_dir) if f.endswith('.h5')]
+    cache = EdgeModelCache(storage_limit=1, do_file_ops=False)
+    model_sizes = {fname: 1 for fname in model_filenames}  # Example: all models are 1GB for sample purposes
+
     for t in range(1000):
         state = np.random.randn(state_dim)
         action = td3.select_action(state)
@@ -173,12 +180,31 @@ if __name__ == "__main__":
         reward = np.random.randn()
         done = np.random.choice([0, 1])
 
+        # Simulate user requests for each model file in cloud
+
+        for model_id in model_filenames:
+            user_id = 0
+            model_size = model_sizes[model_id]
+            # Only try to fetch if model can fit in cache
+            if model_size > cache.storage_limit:
+                print(f"Model {model_id} (size {model_size}) too large for cache (limit {cache.storage_limit}), skipping fetch.")
+                continue
+            result = handle_request(user_id, model_id, cache=cache)
+            if result["status"] == "miss":
+                fetch_from_cloud(model_id, model_size=model_size, cache=cache)
+            print("Cache status:", cache.get_cache_status())
+
         replay_buffer.add((state, next_state, action, reward, done))
 
         if t > 100:
             td3.train(replay_buffer, batch_size=32)
 
-    print("TD3 training loop executed (demo).")
+    print("TD3 training loop executed (demo) with cache integration.")
+
+    # After training, copy final models to cache folder
+    cache.do_file_ops = True
+    for model_id in cache.cache:
+        cache.file_add_to_cache(model_id)
 
 
 
