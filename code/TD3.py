@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
+
 class ReplayBuffer:
     def __init__(self, max_size=1000000):
         self.storage = []
@@ -78,6 +79,7 @@ class Critic(nn.Module):
         q1 = self.l3(q1)
         return q1
 
+
 class TD3(object):
     def __init__(
         self,
@@ -88,7 +90,7 @@ class TD3(object):
         tau=0.005,
         policy_noise=0.2,
         noise_clip=0.5,
-        policy_freq=2
+        policy_freq=2,
     ):
         self.actor = Actor(state_dim, action_dim, max_action)
         self.actor_target = Actor(state_dim, action_dim, max_action)
@@ -117,7 +119,9 @@ class TD3(object):
         self.total_it += 1
 
         # Sample replay buffer
-        state, next_state, action, reward, done = replay_buffer.sample(batch_size)
+        state, next_state, action, reward, done = replay_buffer.sample(
+            batch_size
+        )
 
         state = torch.FloatTensor(state)
         next_state = torch.FloatTensor(next_state)
@@ -126,13 +130,13 @@ class TD3(object):
         done = torch.FloatTensor(done)
 
         with torch.no_grad():
-            noise = (
-                torch.randn_like(action) * self.policy_noise
-            ).clamp(-self.noise_clip, self.noise_clip)
+            noise = (torch.randn_like(action) * self.policy_noise).clamp(
+                -self.noise_clip, self.noise_clip
+            )
 
-            next_action = (
-                self.actor_target(next_state) + noise
-            ).clamp(-self.max_action, self.max_action)
+            next_action = (self.actor_target(next_state) + noise).clamp(
+                -self.max_action, self.max_action
+            )
 
             target_Q1, target_Q2 = self.critic_target(next_state, next_action)
             target_Q = torch.min(target_Q1, target_Q2)
@@ -140,7 +144,9 @@ class TD3(object):
 
         current_Q1, current_Q2 = self.critic(state, action)
 
-        critic_loss = F.mse_loss(current_Q1, target_Q) + F.mse_loss(current_Q2, target_Q)
+        critic_loss = F.mse_loss(current_Q1, target_Q) + F.mse_loss(
+            current_Q2, target_Q
+        )
         self.critic_optimizer.zero_grad()
         critic_loss.backward()
         self.critic_optimizer.step()
@@ -151,16 +157,24 @@ class TD3(object):
             actor_loss.backward()
             self.actor_optimizer.step()
 
-            for param, target_param in zip(self.critic.parameters(), self.critic_target.parameters()):
-                target_param.data.copy_(self.tau * param.data + (1 - self.tau) * target_param.data)
+            for param, target_param in zip(
+                self.critic.parameters(), self.critic_target.parameters()
+            ):
+                target_param.data.copy_(
+                    self.tau * param.data + (1 - self.tau) * target_param.data
+                )
 
-            for param, target_param in zip(self.actor.parameters(), self.actor_target.parameters()):
-                target_param.data.copy_(self.tau * param.data + (1 - self.tau) * target_param.data)
+            for param, target_param in zip(
+                self.actor.parameters(), self.actor_target.parameters()
+            ):
+                target_param.data.copy_(
+                    self.tau * param.data + (1 - self.tau) * target_param.data
+                )
 
 
 if __name__ == "__main__":
-    state_dim = 10  
-    action_dim = 2   
+    state_dim = 10
+    action_dim = 2
     max_action = 1.0
 
     td3 = TD3(state_dim, action_dim, max_action)
@@ -168,10 +182,13 @@ if __name__ == "__main__":
 
     # Initialize cache
     import os
-    cloud_dir = os.path.join(os.path.dirname(__file__), 'cloud')
-    model_filenames = [f for f in os.listdir(cloud_dir) if f.endswith('.h5')]
+
+    cloud_dir = os.path.join(os.path.dirname(__file__), "cloud")
+    model_filenames = [f for f in os.listdir(cloud_dir) if f.endswith(".h5")]
     cache = EdgeModelCache(storage_limit=1, do_file_ops=False)
-    model_sizes = {fname: 1 for fname in model_filenames}  # Example: all models are 1GB for sample purposes
+    model_sizes = {
+        fname: 1 for fname in model_filenames
+    }  # Example: all models are 1GB for sample purposes
 
     for t in range(1000):
         state = np.random.randn(state_dim)
@@ -187,7 +204,9 @@ if __name__ == "__main__":
             model_size = model_sizes[model_id]
             # Only try to fetch if model can fit in cache
             if model_size > cache.storage_limit:
-                print(f"Model {model_id} (size {model_size}) too large for cache (limit {cache.storage_limit}), skipping fetch.")
+                print(
+                    f"Model {model_id} (size {model_size}) too large for cache (limit {cache.storage_limit}), skipping fetch."
+                )
                 continue
             result = handle_request(user_id, model_id, cache=cache)
             if result["status"] == "miss":
@@ -205,6 +224,3 @@ if __name__ == "__main__":
     cache.do_file_ops = True
     for model_id in cache.cache:
         cache.file_add_to_cache(model_id)
-
-
-
