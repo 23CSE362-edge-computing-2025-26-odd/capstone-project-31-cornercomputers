@@ -5,7 +5,7 @@ from model_cache import EdgeModelCache, handle_request, fetch_from_cloud
 from TD3 import TD3, ReplayBuffer
 
 EDGE_COUNT = 10
-RUNS = 1000
+RUNS = 100
 state_dim = 4
 action_dim = 2
 max_action = 1.0
@@ -56,6 +56,7 @@ def smart_edge_request(env, edge, cloud, model, metrics):
     user_id = 0
     result = handle_request(user_id, model.name, cache=edge.cache)
     if result["status"] == "miss":
+        run_metrics["misses"] += 1
         print(
             f"{env.now:.2f}: - {edge.name} cache miss for {model.name}, fetching from cloud"
         )
@@ -66,8 +67,8 @@ def smart_edge_request(env, edge, cloud, model, metrics):
         )
         metrics["data_received"].append(model.model_size)
         print(f"{env.now:.2f}: {edge.name} fetched {model.name} from cloud")
-
     else:
+        run_metrics["hits"] += 1
         metrics["data_received"].append(0)
         print(f"{env.now:.2f}: + {edge.name} cache hit for {model.name}")
 
@@ -162,8 +163,7 @@ edge_biases = {
     },
 }
 
-metrics_total = {"wait_times": [], "data_received": []}
-
+metrics_total = {"wait_times": [], "data_received": [], "hits": 0, "misses": 0}
 
 env = simpy.Environment()
 cloud = Server(env, "cloud", cpu=5000)
@@ -172,7 +172,12 @@ edges = [Server(env, f"edge_{i+1}", cpu=1000) for i in range(EDGE_COUNT)]
 for run in range(RUNS):
     print(f"\n--- Simulation run {run+1} ---")
 
-    run_metrics = {"wait_times": [], "data_received": []}
+    run_metrics = {
+        "wait_times": [],
+        "data_received": [],
+        "hits": 0,
+        "misses": 0,
+    }
 
     # schedule parallel requests
     for edge in edges:
@@ -188,6 +193,8 @@ for run in range(RUNS):
     # aggregate metrics
     metrics_total["wait_times"].extend(run_metrics["wait_times"])
     metrics_total["data_received"].extend(run_metrics["data_received"])
+    metrics_total["hits"] += run_metrics["hits"]
+    metrics_total["misses"] += run_metrics["misses"]
 
 # calculate averages
 avg_wait_time = sum(metrics_total["wait_times"]) / len(
@@ -199,3 +206,10 @@ avg_data_received = sum(metrics_total["data_received"]) / len(
 
 print(f"\nAverage wait time per edge: {avg_wait_time:.2f} time units")
 print(f"Average data received per edge: {avg_data_received:.2f} MB")
+
+total_requests = metrics_total["hits"] + metrics_total["misses"]
+cache_hit_ratio = (
+    metrics_total["hits"] / total_requests if total_requests > 0 else 0
+)
+
+print(f"Cache hit ratio: {cache_hit_ratio * 100:.2f}%")
