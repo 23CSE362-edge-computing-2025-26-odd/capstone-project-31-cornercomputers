@@ -1,0 +1,170 @@
+date_time,holiday,temp,rain_1h,snow_1h,clouds_all,weather_main,weather_description,traffic_volume
+2012-10-02 09:00:00,,278.73,0.0,0.01,51,Clouds,clouds conditions,4731
+2012-10-02 10:00:00,,290.51,0.0,0.0,74,Drizzle,drizzle conditions,3128
+2012-10-02 11:00:00,,272.23,0.0,0.01,39,Snow,snow conditions,2233
+2012-10-02 12:00:00,,284.51,0.0,0.0,99,Haze,haze conditions,4255
+2012-10-02 13:00:00,,270.83,14.46,0.01,97,Thunderstorm,thunderstorm conditions,3423
+2012-10-02 14:00:00,,285.17,0.0,0.03,100,Mist,mist conditions,3385
+2012-10-02 15:00:00,,310.07,0.0,0.0,86,Smoke,smoke conditions,3820
+2012-10-02 16:00:00,,280.51,0.0,0.0,77,Drizzle,drizzle conditions,3239
+2012-10-02 17:00:00,,300.01,0.0,0.01,54,Fog,fog conditions,4388
+2012-10-02 18:00:00,,261.5,61.29,0.01,49,Squall,squall conditions,4080
+2012-10-02 19:00:00,,299.05,64.25,0.0,51,Thunderstorm,thunderstorm conditions,5739
+2012-10-02 20:00:00,,269.46,70.04,0.02,29,Smoke,smoke conditions,704
+2012-10-02 21:00:00,,287.06,0.0,0.0,74,Haze,haze conditions,2521
+2012-10-02 22:00:00,,285.44,0.0,0.0,59,Rain,rain conditions,1247
+2012-10-02 23:00:00,,288.32,72.91,0.0,16,Smoke,smoke conditions,1550
+2012-10-03 00:00:00,,276.8,0.0,0.0,62,Mist,mist conditions,3372
+2012-10-03 01:00:00,,308.77,0.0,0.0,79,Mist,mist conditions,3607
+2012-10-03 02:00:00,,276.22,0.0,0.0,0,Clouds,clouds conditions,3361
+2012-10-03 03:00:00,,284.46,18.5,0.0,36,Haze,haze conditions,3940
+2012-10-03 04:00:00,,289.29,39.15,0.0,60,Mist,mist conditions,1643
+2012-10-03 05:00:00,,295.0,54.69,0.0,41,Drizzle,drizzle conditions,2658
+2012-10-03 06:00:00,,286.97,64.51,0.01,71,Fog,fog conditions,1112
+2012-10-03 07:00:00,,310.07,0.0,0.0,64,Thunderstorm,thunderstorm conditions,4751
+2012-10-03 08:00:00,,279.08,33.45,0.0,21,Snow,snow conditions,3791
+2012-10-03 09:00:00,,291.82,13.48,0.01,85,Mist,mist conditions,5383
+2012-10-03 10:00:00,,264.6,67.64,0.0,0,Squall,squall conditions,2713
+2012-10-03 11:00:00,,261.77,46.13,0.0,62,Mist,mist conditions,3624
+2012-10-03 12:00:00,,262.54,4.91,0.01,100,Snow,snow conditions,3454
+2012-10-03 13:00:00,,301.08,0.0,0.0,0,Clear,clear conditions,2937
+2012-10-03 14:00:00,,280.87,0.0,0.01,65,Rain,rain conditions,3765
+2012-10-03 15:00:00,,275.63,63.43,0.01,100,Clouds,clouds conditions,3636
+2012-10-03 16:00:00,,293.77,6.45,0.01,88,Squall,squall conditions,4001
+2012-10-03 17:00:00,,285.26,13.89,0.0,57,Smoke,smoke conditions,5353
+2012-10-03 18:00:00,,267.29,0.0,0.0,0,Clear,clear conditions,2944
+2012-10-03 19:00:00,,270.69,0.0,0.0,100,Haze,haze conditions,5194
+2012-10-03 20:00:00,,300.6,0.0,0.0,70,Clouds,clouds conditions,1193
+2012-10-03 21:00:00,,293.36,0.0,0.0,78,Squall,squall conditions,1012
+2012-10-03 22:00:00,,276.19,4.67,0.0,25,Fog,fog conditions,3041
+2012-10-03 23:00:00,,269.63,0.0,0.0,27,Snow,snow conditions,2742
+2012-10-04 00:00:00,Memorial Day,288.02,31.16,0.0,1,Thunderstorm,thunderstorm conditions,2871
+2012-10-04 01:00:00,,270.85,82.16,0.01,87,Rain,rain conditions,2095
+2012-10-04 02:00:00,,276.85,0.48,0.0,54,Snow,snow conditions,3835
+2012-10-04 03:00:00,,263.89,0.0,0.0,23,Clear,clear conditions,2253
+2012-10-04 04:00:00,,274.35,44.57,0.0,0,Snow,snow conditions,1607
+2012-10-04 05:00:00,State Fair,275.78,20.53,0.0,46,Haze,haze conditions,2127
+2012-10-04 06:00:00,,282.77,50.54,0.0,79,Smoke,smoke conditions,3072
+2012-10-04 07:00:00,,276.3,0.0,0.0,0,Rain,rain conditions,4400
+2012-10-04 08:00:00,,256.39,63.34,0.01,52,Clouds,clouds conditions,5472
+2012-10-04 09:00:00,Thanksgiving Day,271.92,0.0,0.0,32,Clouds,clouds conditions,4703
+2012-10-04 10:00:00,,262.47,50.24,0.01,23,Haze,haze conditions,4276
+2012-10-04 11:00:00,New Years Day,293.35,0.0,0.01,96,Fog,fog conditions,3513
+2012-10-04 12:00:00,,277.05,72.31,0.0,57,Haze,haze conditions,4566
+2012-10-04 13:00:00,,280.85,47.67,0.01,37,Drizzle,drizzle conditions,3941
+2012-10-04 14:00:00,Labor Day,275.35,29.01,0.0,49,Clouds,clouds conditions,2707
+2012-10-04 15:00:00,,279.84,0.0,0.0,100,Mist,mist conditions,2851
+2012-10-04 16:00:00,,274.29,104.86,0.0,100,Haze,haze conditions,4205
+2012-10-04 17:00:00,,264.59,0.0,0.0,98,Thunderstorm,thunderstorm conditions,5180
+2012-10-04 18:00:00,,284.6,0.0,0.0,0,Snow,snow conditions,2948
+2012-10-04 19:00:00,,263.0,0.0,0.0,76,Haze,haze conditions,3942
+2012-10-04 20:00:00,Independence Day,301.14,34.49,0.01,76,Clear,clear conditions,2693
+2012-10-04 21:00:00,State Fair,288.37,0.0,0.0,78,Clear,clear conditions,781
+2012-10-04 22:00:00,,281.48,0.0,0.0,72,Smoke,smoke conditions,2453
+2012-10-04 23:00:00,,284.79,0.0,0.0,72,Smoke,smoke conditions,3614
+2012-10-05 00:00:00,,267.99,55.24,0.0,2,Snow,snow conditions,91
+2012-10-05 01:00:00,,288.44,35.13,0.0,62,Mist,mist conditions,2596
+2012-10-05 02:00:00,State Fair,289.09,44.85,0.0,80,Haze,haze conditions,3113
+2012-10-05 03:00:00,,294.88,0.0,0.01,20,Mist,mist conditions,2095
+2012-10-05 04:00:00,,270.85,1.3,0.0,12,Rain,rain conditions,2096
+2012-10-05 05:00:00,,293.18,80.59,0.0,31,Clouds,clouds conditions,2836
+2012-10-05 06:00:00,,289.3,49.72,0.0,99,Mist,mist conditions,2558
+2012-10-05 07:00:00,,291.61,20.85,0.02,79,Rain,rain conditions,4055
+2012-10-05 08:00:00,,278.28,0.0,0.0,76,Clear,clear conditions,4049
+2012-10-05 09:00:00,,286.36,0.0,0.01,63,Rain,rain conditions,4585
+2012-10-05 10:00:00,,261.23,110.45,0.0,50,Drizzle,drizzle conditions,3487
+2012-10-05 11:00:00,Columbus Day,287.35,0.0,0.0,29,Clear,clear conditions,2394
+2012-10-05 12:00:00,,279.71,23.6,0.0,60,Fog,fog conditions,1416
+2012-10-05 13:00:00,,256.45,0.0,0.0,28,Clouds,clouds conditions,4078
+2012-10-05 14:00:00,,284.96,0.0,0.0,0,Mist,mist conditions,3615
+2012-10-05 15:00:00,,274.58,0.0,0.0,30,Squall,squall conditions,2786
+2012-10-05 16:00:00,,260.26,0.0,0.0,75,Clear,clear conditions,3333
+2012-10-05 17:00:00,,293.08,0.0,0.0,72,Clear,clear conditions,5180
+2012-10-05 18:00:00,,276.36,0.0,0.0,100,Clear,clear conditions,4142
+2012-10-05 19:00:00,,265.89,0.0,0.0,8,Clear,clear conditions,3641
+2012-10-05 20:00:00,,291.45,6.75,0.0,51,Clouds,clouds conditions,2198
+2012-10-05 21:00:00,,299.69,9.13,0.0,0,Fog,fog conditions,3076
+2012-10-05 22:00:00,,235.21,0.0,0.01,59,Smoke,smoke conditions,1982
+2012-10-05 23:00:00,,285.97,0.0,0.0,74,Drizzle,drizzle conditions,1994
+2012-10-06 00:00:00,,270.86,38.79,0.0,65,Clouds,clouds conditions,1868
+2012-10-06 01:00:00,,277.56,0.0,0.01,58,Clouds,clouds conditions,1944
+2012-10-06 02:00:00,,268.76,0.0,0.01,48,Smoke,smoke conditions,1296
+2012-10-06 03:00:00,,271.56,0.0,0.01,76,Squall,squall conditions,914
+2012-10-06 04:00:00,,309.08,11.92,0.0,49,Rain,rain conditions,1456
+2012-10-06 05:00:00,,277.35,36.36,0.0,24,Squall,squall conditions,971
+2012-10-06 06:00:00,,275.77,68.77,0.0,45,Snow,snow conditions,2278
+2012-10-06 07:00:00,,279.23,66.65,0.0,91,Thunderstorm,thunderstorm conditions,2252
+2012-10-06 08:00:00,,310.07,0.0,0.0,36,Mist,mist conditions,3479
+2012-10-06 09:00:00,,291.87,0.0,0.02,90,Mist,mist conditions,4735
+2012-10-06 10:00:00,,252.98,0.0,0.0,79,Clouds,clouds conditions,1715
+2012-10-06 11:00:00,,286.78,0.0,0.0,44,Clouds,clouds conditions,2718
+2012-10-06 12:00:00,,296.2,30.79,0.0,24,Squall,squall conditions,1779
+2012-10-06 13:00:00,Memorial Day,288.72,47.45,0.0,32,Mist,mist conditions,2543
+2012-10-06 14:00:00,Thanksgiving Day,310.07,91.66,0.0,62,Snow,snow conditions,2117
+2012-10-06 15:00:00,,267.92,27.07,0.0,13,Fog,fog conditions,2760
+2012-10-06 16:00:00,,277.73,30.29,0.01,0,Snow,snow conditions,1148
+2012-10-06 17:00:00,,267.2,14.74,0.01,49,Thunderstorm,thunderstorm conditions,2388
+2012-10-06 18:00:00,,259.07,23.43,0.0,47,Rain,rain conditions,3593
+2012-10-06 19:00:00,,295.3,0.0,0.0,4,Thunderstorm,thunderstorm conditions,2470
+2012-10-06 20:00:00,,297.73,0.0,0.01,39,Clear,clear conditions,1832
+2012-10-06 21:00:00,,310.03,49.24,0.01,50,Squall,squall conditions,2073
+2012-10-06 22:00:00,,284.09,61.34,0.0,24,Fog,fog conditions,582
+2012-10-06 23:00:00,,260.6,0.0,0.0,0,Clouds,clouds conditions,1290
+2012-10-07 00:00:00,,278.32,0.0,0.01,0,Thunderstorm,thunderstorm conditions,1982
+2012-10-07 01:00:00,Memorial Day,272.14,0.0,0.0,38,Snow,snow conditions,1591
+2012-10-07 02:00:00,Martin Luther King Jr Day,297.68,4.39,0.01,33,Snow,snow conditions,2092
+2012-10-07 03:00:00,,267.05,10.21,0.0,82,Squall,squall conditions,1150
+2012-10-07 04:00:00,,278.96,0.0,0.0,100,Snow,snow conditions,488
+2012-10-07 05:00:00,,276.3,37.95,0.0,94,Haze,haze conditions,807
+2012-10-07 06:00:00,,288.73,40.45,0.0,21,Snow,snow conditions,1906
+2012-10-07 07:00:00,,255.64,0.0,0.0,0,Thunderstorm,thunderstorm conditions,5021
+2012-10-07 08:00:00,,279.34,0.0,0.0,0,Rain,rain conditions,2507
+2012-10-07 09:00:00,,282.53,102.19,0.0,8,Fog,fog conditions,3037
+2012-10-07 10:00:00,,276.64,0.0,0.0,100,Smoke,smoke conditions,3693
+2012-10-07 11:00:00,,286.67,51.8,0.0,38,Clouds,clouds conditions,2301
+2012-10-07 12:00:00,,290.0,61.49,0.0,84,Smoke,smoke conditions,3001
+2012-10-07 13:00:00,Martin Luther King Jr Day,267.44,0.0,0.01,73,Fog,fog conditions,2733
+2012-10-07 14:00:00,,308.77,41.91,0.0,17,Thunderstorm,thunderstorm conditions,2801
+2012-10-07 15:00:00,,261.0,0.0,0.0,84,Thunderstorm,thunderstorm conditions,2236
+2012-10-07 16:00:00,,297.4,0.0,0.0,85,Mist,mist conditions,3283
+2012-10-07 17:00:00,,269.63,0.0,0.0,83,Drizzle,drizzle conditions,4714
+2012-10-07 18:00:00,,268.57,0.0,0.01,17,Rain,rain conditions,3082
+2012-10-07 19:00:00,,283.63,0.0,0.01,92,Clouds,clouds conditions,3927
+2012-10-07 20:00:00,,276.34,0.0,0.0,0,Rain,rain conditions,1461
+2012-10-07 21:00:00,,259.19,0.0,0.0,38,Clear,clear conditions,1662
+2012-10-07 22:00:00,State Fair,306.18,32.05,0.0,0,Squall,squall conditions,1113
+2012-10-07 23:00:00,,285.77,0.0,0.0,34,Smoke,smoke conditions,1402
+2012-10-08 00:00:00,,285.64,0.0,0.01,100,Rain,rain conditions,641
+2012-10-08 01:00:00,,279.33,24.67,0.0,37,Thunderstorm,thunderstorm conditions,1629
+2012-10-08 02:00:00,,274.36,0.0,0.0,34,Thunderstorm,thunderstorm conditions,1481
+2012-10-08 03:00:00,,269.11,0.0,0.0,100,Squall,squall conditions,3465
+2012-10-08 04:00:00,,298.48,46.82,0.0,56,Fog,fog conditions,3605
+2012-10-08 05:00:00,,294.46,0.0,0.01,0,Mist,mist conditions,2557
+2012-10-08 06:00:00,,285.33,51.15,0.01,0,Clear,clear conditions,2369
+2012-10-08 07:00:00,,264.5,9.13,0.0,49,Thunderstorm,thunderstorm conditions,4034
+2012-10-08 08:00:00,State Fair,278.96,0.0,0.0,64,Thunderstorm,thunderstorm conditions,5170
+2012-10-08 09:00:00,,285.84,20.73,0.0,79,Snow,snow conditions,4451
+2012-10-08 10:00:00,,292.56,29.31,0.01,76,Snow,snow conditions,3147
+2012-10-08 11:00:00,,295.61,0.0,0.0,86,Fog,fog conditions,3683
+2012-10-08 12:00:00,,280.95,0.0,0.0,0,Smoke,smoke conditions,3471
+2012-10-08 13:00:00,,260.0,37.84,0.01,100,Squall,squall conditions,3524
+2012-10-08 14:00:00,,303.25,9.28,0.0,15,Thunderstorm,thunderstorm conditions,3190
+2012-10-08 15:00:00,,279.09,29.26,0.0,100,Haze,haze conditions,3804
+2012-10-08 16:00:00,Columbus Day,268.82,56.99,0.0,27,Thunderstorm,thunderstorm conditions,3457
+2012-10-08 17:00:00,,278.91,0.0,0.0,51,Drizzle,drizzle conditions,3932
+2012-10-08 18:00:00,,292.86,24.41,0.01,71,Squall,squall conditions,5004
+2012-10-08 19:00:00,,279.46,0.0,0.0,46,Squall,squall conditions,4984
+2012-10-08 20:00:00,,257.76,31.79,0.0,0,Haze,haze conditions,651
+2012-10-08 21:00:00,,270.91,0.0,0.0,77,Haze,haze conditions,2216
+2012-10-08 22:00:00,,296.34,10.02,0.01,64,Fog,fog conditions,504
+2012-10-08 23:00:00,,265.19,32.89,0.0,20,Clouds,clouds conditions,2048
+2012-10-09 00:00:00,State Fair,258.37,4.06,0.01,0,Clear,clear conditions,1927
+2012-10-09 01:00:00,,309.27,71.89,0.0,73,Thunderstorm,thunderstorm conditions,2430
+2012-10-09 02:00:00,,288.87,8.47,0.01,57,Thunderstorm,thunderstorm conditions,1632
+2012-10-09 03:00:00,Washingtons Birthday,264.62,43.22,0.0,84,Squall,squall conditions,3347
+2012-10-09 04:00:00,,283.15,29.93,0.01,66,Squall,squall conditions,2101
+2012-10-09 05:00:00,,291.62,0.0,0.0,99,Drizzle,drizzle conditions,1734
+2012-10-09 06:00:00,Thanksgiving Day,307.17,29.04,0.0,61,Clear,clear conditions,2257
+2012-10-09 07:00:00,,269.41,18.29,0.0,100,Drizzle,drizzle conditions,4963
+2012-10-09 08:00:00,,265.47,45.37,0.0,100,Fog,fog conditions,4399
+2012-10-09 09:00:00,,305.15,6.82,0.0,21,Mist,mist conditions,4651
