@@ -1,200 +1,145 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import load_model
+import joblib
 import os
+from datetime import datetime, timedelta
+import argparse
 
 # Configuration
 CSV_FILE = "traffic.csv"
-MODEL_FILE = "../cloud/traffic_junction_cnn.h5"
-SEQ_LENGTH = 24
+MODEL_FILE = "../cloud/traffic_cnn_best_model.h5"
+SCALER_FILE = "../cloud/traffic_scaler.save"
+SEQ_LEN = 24
 
-def load_traffic_data(csv_file):
-    """Load traffic data from CSV file"""
-    if not os.path.exists(csv_file):
-        print(f"Warning: {csv_file} not found. Creating synthetic test data...")
-        return create_synthetic_data()
-    df = pd.read_csv(csv_file)
-    print(f"Data loaded: {df.shape[0]} rows")
-    print(f"Columns: {df.columns.tolist()}")
-    print(f"\nFirst few rows:")
-    print(df.head())
-    return df
+def load_reference_data():
+    if not os.path.exists(CSV_FILE):
+        raise FileNotFoundError(f"[error] {CSV_FILE} not found.")
+    df = pd.read_csv(CSV_FILE)
+    stats = df.groupby("Junction")["Vehicles"].agg(["mean", "std"]).to_dict("index")
+    all_junctions = sorted(df["Junction"].unique().tolist())
+    return stats, all_junctions
 
-def create_synthetic_data():
-    """Create synthetic traffic data for testing"""
-    np.random.seed(42)
-    dates = pd.date_range('2025-03-01', periods=120, freq='H')
-    data = {
-        'DateTime': dates,
-        'Junction': [1] * 120,
-        'Vehicles': np.random.randint(50, 150, 120).astype(float)
-    }
-    return pd.DataFrame(data)
-
-def preprocess_data(df, seq_length=24):
-    """Preprocess traffic data similar to create.py"""
-    # Convert DateTime to datetime format
-    df["DateTime"] = pd.to_datetime(df["DateTime"])
+def generate_synthetic_junction_data(junction_id: int, days: int = 7):
+    stats, all_junctions = load_reference_data()
+    if junction_id not in stats:
+        raise ValueError(f"Junction {junction_id} not found in dataset. Available: {all_junctions}")
     
-    # Extract features from DateTime
+    mean_val = stats[junction_id]["mean"]
+    std_val = stats[junction_id]["std"]
+    print(f"[data] Generating synthetic data for Junction {junction_id} (μ={mean_val:.2f}, σ={std_val:.2f})")
+
+
+    end_date = datetime.now().replace(minute=0, second=0, microsecond=0)
+    start_date = end_date - timedelta(days=days)
+    date_rng = pd.date_range(start=start_date, end=end_date, freq="h")
+
+    vehicles = []
+    for dt in date_rng:
+        hour = dt.hour
+        noise = np.random.normal(0, std_val * 0.3)
+        if 7 <= hour <= 9 or 17 <= hour <= 19:
+            val = mean_val + std_val * 0.6 + noise
+        elif 0 <= hour <= 5:
+            val = mean_val - std_val * 0.4 + noise
+        else:
+            val = mean_val + noise
+        vehicles.append(max(0, val))
+    
+    df = pd.DataFrame({
+        "DateTime": date_rng,
+        "Junction": [junction_id] * len(date_rng),
+        "Vehicles": vehicles
+    })
+    df.to_csv(f"junction_{junction_id}_synthetic.csv", index=False)
+    print(f"[data] Synthetic data saved → junction_{junction_id}_synthetic.csv ({len(df)} rows)")
+    return df, all_junctions
+
+def preprocess_data(df, all_junctions):
+    df["DateTime"] = pd.to_datetime(df["DateTime"])
+    df = df.sort_values("DateTime").reset_index(drop=True)
     df["Hour"] = df["DateTime"].dt.hour
     df["DayOfWeek"] = df["DateTime"].dt.dayofweek
     df["Month"] = df["DateTime"].dt.month
-    
-    # Sort by Junction and DateTime
-    df = df.sort_values(["Junction", "DateTime"]).reset_index(drop=True)
-    
-    print(f"\nData preprocessed")
-    print(f"Unique Junctions: {df['Junction'].unique()}")
-    
-    return df
 
-def create_sequences(data, seq_length=24, target_col="Vehicles"):
-    """Create sequences for LSTM/CNN model"""
-    sequences, targets = [], []
-    feature_cols = ["Vehicles", "Hour", "DayOfWeek", "Month", "Junction"]
-    
-    for junction in data["Junction"].unique():
-        junc_data = data[data["Junction"] == junction].sort_values("DateTime").reset_index(drop=True)
-        
-        # Check if we have enough data
-        if len(junc_data) < seq_length:
-            print(f"Warning: Junction {junction} has only {len(junc_data)} records (need at least {seq_length})")
-            continue
-            
-        features = junc_data[feature_cols].values
-        
-        for i in range(seq_length, len(junc_data)):
-            sequences.append(features[i-seq_length:i])
-            targets.append(junc_data[target_col].iloc[i])
-    
-    return np.array(sequences), np.array(targets)
+    junction_dummies = pd.get_dummies(df["Junction"].astype(str), prefix="J")
 
-def scale_data(X, y):
-    """Scale data using MinMaxScaler"""
-    scaler_X = MinMaxScaler()
-    scaler_y = MinMaxScaler()
-    
-    n_samples, n_timesteps, n_features = X.shape
-    
-    # Reshape X for scaling
-    X_reshaped = X.reshape(-1, n_features)
-    X_scaled = scaler_X.fit_transform(X_reshaped).reshape(n_samples, n_timesteps, n_features)
-    
-    # Reshape y for scaling
-    y_scaled = scaler_y.fit_transform(y.reshape(-1, 1)).flatten()
-    
-    print(f"\nData scaled")
-    print(f"X_scaled shape: {X_scaled.shape}")
-    print(f"y_scaled shape: {y_scaled.shape}")
-    
-    return X_scaled, y_scaled, scaler_X, scaler_y
 
-def make_predictions(model, X_scaled, scaler_y):
-    """Make predictions using the loaded model"""
-    print(f"\nModel input shape expected: {model.input_shape}")
-    print(f"X_scaled shape: {X_scaled.shape}")
+    for j in all_junctions:
+        col_name = f"J_{j}"
+        if col_name not in junction_dummies.columns:
+            junction_dummies[col_name] = 0
+    junction_dummies = junction_dummies[[f"J_{j}" for j in all_junctions]]
+
+    df = pd.concat([df, junction_dummies], axis=1)
+    feature_cols = ["Vehicles", "Hour", "DayOfWeek", "Month"] + list(junction_dummies.columns)
+    return df, feature_cols
+
+def predict_next_24h(model, scaler, df, feature_cols):
+    df_scaled = df.copy()
+    df_scaled[feature_cols] = scaler.transform(df[feature_cols])
+
+    last_seq = df_scaled[feature_cols].values[-SEQ_LEN:]
+    seq = last_seq.copy()
+    preds_scaled = []
+
+    for _ in range(24):
+        inp = seq.reshape(1, SEQ_LEN, len(feature_cols))
+        pred_scaled = model.predict(inp, verbose=0)[0, 0]
+        preds_scaled.append(pred_scaled)
+        new_row = seq[-1].copy()
+        new_row[0] = pred_scaled
+        seq = np.vstack([seq[1:], new_row])
     
-    # Make predictions
-    try:
-        y_pred_scaled = model.predict(X_scaled, verbose=0)
-    except Exception as e:
-        print(f"Warning: Error during prediction: {e}")
-        print("Attempting alternative prediction method...")
-        y_pred_scaled = model.predict(X_scaled[:100], verbose=0)
-        if len(X_scaled) > 100:
-            print(f"Note: Only predicting first 100 samples due to model issue")
-            X_scaled = X_scaled[:100]
-    
-    # Handle output shape
-    if len(y_pred_scaled.shape) > 1 and y_pred_scaled.shape[1] == 1:
-        y_pred_scaled = y_pred_scaled.flatten()
-    
-    # Inverse scale predictions
-    y_pred = scaler_y.inverse_transform(y_pred_scaled.reshape(-1, 1)).flatten()
-    
-    print(f"Predictions made: {y_pred.shape}")
-    
-    return y_pred
+    preds_raw = scaler.inverse_transform(
+        np.hstack([np.array(preds_scaled).reshape(-1, 1), np.zeros((24, len(feature_cols) - 1))])
+    )[:, 0]
+    preds_raw = np.clip(preds_raw, 0, None)
+    return preds_raw
 
 def main():
-    """Main execution function"""
-    print("=" * 60)
-    print("Traffic Volume Prediction using CNN Model")
-    print("=" * 60)
-    
-    # Check if files exist
-    if not os.path.exists(CSV_FILE):
-        print(f"Error: {CSV_FILE} not found!")
-        return
-    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--junction", type=int, default=1, help="Junction ID (1–4)")
+    args = parser.parse_args()
+    junction_id = args.junction
+
+    print("=" * 65)
+    print(f"Traffic Volume Prediction (Next 24 Hours) — Junction {junction_id}")
+    print("=" * 65)
+
     if not os.path.exists(MODEL_FILE):
-        print(f"Error: {MODEL_FILE} not found!")
-        print(f"Available .h5 files: {[f for f in os.listdir('.') if f.endswith('.h5')]}")
+        print(f"[error] Model file {MODEL_FILE} not found.")
         return
     
-    # Load data
-    df = load_traffic_data(CSV_FILE)
-    
-    # Preprocess data
-    df = preprocess_data(df, seq_length=SEQ_LENGTH)
-    
-    # Create sequences
-    X, y = create_sequences(df, seq_length=SEQ_LENGTH)
-    print(f"\nSequences created: {X.shape[0]} sequences")
-    
-    if X.shape[0] == 0:
-        print("Error: No sequences created! Check your data and sequence length.")
-        return
-    
-    # Scale data
-    X_scaled, y_scaled, scaler_X, scaler_y = scale_data(X, y)
-    
-    # Load model
-    print(f"\nLoading model: {MODEL_FILE}")
+    # Load model with error handling for version compatibility
     try:
         model = load_model(MODEL_FILE)
-        print("Model loaded successfully!")
+        print("[load] Model loaded successfully.")
     except Exception as e:
-        print(f"Error loading model with default settings: {e}")
-        print("Attempting to load with custom_objects...")
+        print(f"[warning] Standard load failed: {e}")
+        print("[info] Attempting to load with compile=False...")
         try:
-            from tensorflow.keras.metrics import mse
-            model = load_model(MODEL_FILE, custom_objects={'mse': mse})
-            print("Model loaded with custom objects!")
+            model = load_model(MODEL_FILE, compile=False)
+            print("[load] Model loaded with compile=False.")
         except Exception as e2:
-            print(f"Error: Could not load model: {e2}")
+            print(f"[error] Could not load model: {e2}")
             return
     
-    # Make predictions
-    y_pred = make_predictions(model, X_scaled, scaler_y)
-    
-    # Display results
-    print("\n" + "=" * 60)
-    print("Prediction Results (First 20 samples):")
-    print("=" * 60)
-    print(f"{'Sample':<10} {'Predicted':<15} {'Scaled Actual':<15}")
-    print("-" * 60)
-    
-    for i in range(min(20, len(y_pred))):
-        print(f"{i+1:<10} {y_pred[i]:<15.2f} {y_scaled[i]:<15.4f}")
-    
-    print("=" * 60)
-    print(f"\nPrediction Statistics:")
-    print(f"Mean Prediction: {y_pred.mean():.2f}")
-    print(f"Min Prediction: {y_pred.min():.2f}")
-    print(f"Max Prediction: {y_pred.max():.2f}")
-    print(f"Std Dev: {y_pred.std():.2f}")
-    
-    # Save results
-    results_file = "predictions_results.csv"
-    results_df = pd.DataFrame({
-        'Prediction': y_pred,
-        'Scaled_Actual': y_scaled[:len(y_pred)]
-    })
-    results_df.to_csv(results_file, index=False)
-    print(f"\nResults saved to {results_file}")
+    scaler = joblib.load(SCALER_FILE)
+
+    df, all_junctions = generate_synthetic_junction_data(junction_id)
+    df, feature_cols = preprocess_data(df, all_junctions)
+
+    preds = predict_next_24h(model, scaler, df, feature_cols)
+
+    future_times = pd.date_range(df["DateTime"].iloc[-1] + timedelta(hours=1), periods=24, freq="h")
+    results = pd.DataFrame({"DateTime": future_times, "Predicted_Vehicles": preds})
+    results.to_csv(f"junction_{junction_id}_next24h.csv", index=False)
+
+    print(f"[pred] Next 24-hour forecast generated for Junction {junction_id}")
+    print(f"[save] Saved → junction_{junction_id}_next24h.csv")
+    print("\nSample:")
+    print(results.head())
 
 if __name__ == "__main__":
     main()
