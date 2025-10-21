@@ -93,9 +93,19 @@ if __name__ == "__main__":
 
     predictor = AdvancedDenseTrafficPredictor(model_path="../../cloud/traffic_adv_model")
 
-
-    predictor.model = load_model(model_file)
-    print(f"[load] Model loaded from {model_file}")
+    # Load model with error handling for version compatibility
+    try:
+        predictor.model = load_model(model_file)
+        print(f"[load] Model loaded from {model_file}")
+    except Exception as e:
+        print(f"[warning] Standard load failed: {e}")
+        print("[info] Attempting to load with compile=False...")
+        try:
+            predictor.model = load_model(model_file, compile=False)
+            print(f"[load] Model loaded from {model_file} with compile=False")
+        except Exception as e2:
+            print(f"[error] Could not load model: {e2}")
+            exit(1)
 
 
     with open(pkl_file, "rb") as f:

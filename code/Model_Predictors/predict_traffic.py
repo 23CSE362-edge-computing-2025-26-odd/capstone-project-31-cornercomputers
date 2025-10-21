@@ -110,9 +110,22 @@ def main():
     if not os.path.exists(MODEL_FILE):
         print(f"[error] Model file {MODEL_FILE} not found.")
         return
-    model = load_model(MODEL_FILE)
+    
+    # Load model with error handling for version compatibility
+    try:
+        model = load_model(MODEL_FILE)
+        print("[load] Model loaded successfully.")
+    except Exception as e:
+        print(f"[warning] Standard load failed: {e}")
+        print("[info] Attempting to load with compile=False...")
+        try:
+            model = load_model(MODEL_FILE, compile=False)
+            print("[load] Model loaded with compile=False.")
+        except Exception as e2:
+            print(f"[error] Could not load model: {e2}")
+            return
+    
     scaler = joblib.load(SCALER_FILE)
-    print("[load] Model and scaler loaded successfully.")
 
     df, all_junctions = generate_synthetic_junction_data(junction_id)
     df, feature_cols = preprocess_data(df, all_junctions)
